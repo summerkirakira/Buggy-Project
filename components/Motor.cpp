@@ -11,7 +11,7 @@ encoder(channel_a, channel_b, NC, 256) {
     motor_pwm.period_ms(PWM_PERIOD);
     current_pulses = 0;
     last_pulses = 0;
-    ticker.attach_us(callback(this, &Motor::measure_speed), 5000);
+    ticker.attach(callback(this, &Motor::measure_speed), 5ms);
 }
 
 void Motor::set_power(float power) {

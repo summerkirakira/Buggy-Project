@@ -31,11 +31,19 @@ float DriveBoard::get_left_motor_power() {
 }
 
 float DriveBoard::get_right_motor_power() {
-    return right_motor.get_power()
+    return right_motor.get_power();
 }
 
 float DriveBoard::get_left_motor_velocity() {
-    
+    return left_motor.get_velocity();
+}
+
+void DriveBoard::set_left_motor_power(float power) {
+    left_motor.set_power(power);
+}
+
+void DriveBoard::set_right_motor_power(float power) {
+    right_motor.set_power(power);
 }
 
 

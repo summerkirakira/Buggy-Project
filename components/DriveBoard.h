@@ -21,6 +21,6 @@ class DriveBoard {
         float get_right_motor_velocity();
         float get_left_motor_power();
         float get_right_motor_power();
-        void set_left_motor_power();
-        void set_right_motor_power();
-}
+        void set_left_motor_power(float power);
+        void set_right_motor_power(float power);
+};

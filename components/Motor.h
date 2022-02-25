@@ -1,4 +1,5 @@
 #include <mbed.h>
+#include <QEI.h>
 
 class Motor {
     private:
@@ -22,4 +23,4 @@ class Motor {
         void set_power(float power);
         float get_power(void);
         void measure_speed(void);
-}
+};
