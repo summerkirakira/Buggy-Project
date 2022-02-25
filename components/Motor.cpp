@@ -11,6 +11,7 @@ encoder(channel_a, channel_b, NC, 256) {
     motor_pwm.period_ms(PWM_PERIOD);
     current_pulses = 0;
     last_pulses = 0;
+    ticker.attach_us(callback(this, &Motor::measure_speed), 5000);
 }
 
 void Motor::set_power(float power) {
@@ -29,7 +30,5 @@ float Motor::get_velocity() {
 void Motor::measure_speed() {
     last_pulses = current_pulses;
     current_pulses = encoder.getPulses();
-    current_speed = (current_pulses - last_pulses) / messure_period_ms * gear_ratio;
+    current_speed = (current_pulses - last_pulses) / measure_period_ms * gear_ratio;
 }
-
-

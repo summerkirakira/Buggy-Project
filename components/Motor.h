@@ -11,9 +11,8 @@ class Motor {
         Ticker ticker;
         int current_pulses;
         int last_pulses;
-        void measure_speed();
         float current_speed;
-        float messure_period_ms;
+        float measure_period_ms;
         float gear_ratio;
         QEI encoder;
 
@@ -22,4 +21,5 @@ class Motor {
         float get_velocity(void);
         void set_power(float power);
         float get_power(void);
+        void measure_speed(void);
 }
