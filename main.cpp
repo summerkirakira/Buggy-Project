@@ -38,52 +38,57 @@ int main() {
   // pwm2.write(0.46);
   // enable = 1;
 
-  // my_drive_board.start_left_motor(0.72);
-  // my_drive_board.start_right_motor(0.72);
-  // ThisThread::sleep_for(3000ms);
-  // my_drive_board.turn_left_90();
-  // ThisThread::sleep_for(3000ms);
-  // my_drive_board.turn_left_90();
-  // ThisThread::sleep_for(3000ms);
-  // my_drive_board.turn_left_90();
-  // ThisThread::sleep_for(3000ms);
+  my_drive_board.start_left_motor(0.52);
+  my_drive_board.start_right_motor(0.54);
+  my_drive_board.set_check_point();
+  while(1) {
+    printf("angular is: %d line distance is: %d\n", int(my_drive_board.get_angular() * 1000), int(my_drive_board.get_line_distance()*1000));
+    ThisThread::sleep_for(2s);
+  }
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
 
   my_drive_board.disable_all();
 
-  // while(1) {
-    // printf("left speed is: %d right speed is: %d\n", int(my_drive_board.get_left_motor_velocity()), int(my_drive_board.get_right_motor_velocity()));
-    // ThisThread::sleep_for(2s);
-  // }
-  float base_power = 0.72;
-  while(1) {
-    switch (state)
-    {
-    case initialisation:
-      ThisThread::sleep_for(5s);
-      my_drive_board.set_left_motor_power(base_power);
-      my_drive_board.set_right_motor_power(base_power);
-      state = straight;
-      my_drive_board.set_check_point();
-      break;
-    case straight:
-      if(my_drive_board.get_line_distance() >= 0.5) {
-        state = turn_left;
-        my_drive_board.stop_left_motor();
-        my_drive_board.set_check_point();
-        break;
-      }
-      break;
-    case turn_left:
-      if(my_drive_board.get_angular() >= 1) {
-        state = straight;
-        my_drive_board.set_check_point();
-        break;
-      }
-      break;
-    default:
-      state = stop;
-      break;
-    }
-  }
 
+
+
+
+
+//   float base_power = 0.72;
+//   while(1) {
+//     switch (state)
+//     {
+//     case initialisation:
+//       ThisThread::sleep_for(5s);
+//       my_drive_board.set_left_motor_power(base_power);
+//       my_drive_board.set_right_motor_power(base_power);
+//       state = straight;
+//       my_drive_board.set_check_point();
+//       break;
+//     case straight:
+//       if(my_drive_board.get_line_distance() >= 0.5) {
+//         state = turn_left;
+//         my_drive_board.stop_left_motor();
+//         my_drive_board.set_check_point();
+//         break;
+//       }
+//       break;
+//     case turn_left:
+//       if(my_drive_board.get_angular() >= 1) {
+//         state = straight;
+//         my_drive_board.set_check_point();
+//         break;
+//       }
+//       break;
+//     default:
+//       state = stop;
+//       break;
+//     }
+//   }
 }

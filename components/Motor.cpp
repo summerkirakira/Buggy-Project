@@ -20,6 +20,7 @@ encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
     current_pulses = 0;
     last_pulses = 0;
     gear_ratio = 3 * 0.075 * 3.1415;
+    total_distance = 0;
     ticker.attach(callback(this, &Motor::measure_speed), 0.05);
 }
 
