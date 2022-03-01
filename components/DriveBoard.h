@@ -6,6 +6,9 @@ class DriveBoard {
         Motor left_motor;
         Motor right_motor;
         DigitalOut enable;
+        int status; // 0 for normal, 1 for turning left, 2 for turning right
+        float left_motor_flag_distance;
+        float right_motor_flag_distance;
     public:
         DriveBoard(
             PinName left_motor_bipolar,
@@ -33,4 +36,7 @@ class DriveBoard {
         void start_right_motor(float power);
         void disable_all();
         void enable_all();
+        void turn_left_90();
+        void get_angular();
+        void get_line_distance();
 };

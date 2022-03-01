@@ -34,18 +34,20 @@ int main() {
   // enable = 1;
 
   DriveBoard my_drive_board(PA_5, PA_6, PA_7, PC_10, PC_12, PB_6, PA_9,PC_7, PC_3, PC_2, PA_8);
-  my_drive_board.stop_right_motor();
-  ThisThread::sleep_for(5s);
-  my_drive_board.start_left_motor(0.55);
-  ThisThread::sleep_for(5s);
-  my_drive_board.start_right_motor(0.55);
-
-  ThisThread::sleep_for(5s);
+  my_drive_board.start_left_motor(0.72);
+  my_drive_board.start_right_motor(0.72);
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
+  my_drive_board.turn_left_90();
+  ThisThread::sleep_for(3000ms);
 
   my_drive_board.disable_all();
 
   while(1) {
-    printf("left speed is: %d right speed is: %d\n", int(my_drive_board.get_left_motor_velocity()), int(my_drive_board.get_right_motor_velocity()));
-    ThisThread::sleep_for(2s);
+    // printf("left speed is: %d right speed is: %d\n", int(my_drive_board.get_left_motor_velocity()), int(my_drive_board.get_right_motor_velocity()));
+    // ThisThread::sleep_for(2s);
   }
 }

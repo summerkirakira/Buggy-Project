@@ -83,3 +83,14 @@ void DriveBoard::disable_all() {
 void DriveBoard::enable_all() {
     enable = 1;
 }
+
+void DriveBoard::turn_left_90() {
+  stop_left_motor();
+  start_right_motor(0.72);
+  ThisThread::sleep_for(1350ms);
+  start_left_motor(0.72);
+}
+
+void DriveBoard::get_angular() {
+    
+}
