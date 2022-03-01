@@ -91,6 +91,19 @@ void DriveBoard::turn_left_90() {
   start_left_motor(0.72);
 }
 
-void DriveBoard::get_angular() {
-    
+float DriveBoard::get_angular() {
+    float left_distance = left_motor.get_total_distance();
+    float right_distance = right_motor.get_total_distance();
+    return ((left_distance - left_motor_flag_distance) - (right_distance - right_motor_flag_distance)) / 0.33;
+}
+
+float DriveBoard::get_line_distance() {
+    float left_distance = left_motor.get_total_distance();
+    float right_distance = right_motor.get_total_distance();
+    return ((left_distance - left_motor_flag_distance) + (right_distance - right_motor_flag_distance)) / 2;
+}
+
+void DriveBoard::set_check_point() {
+    left_motor_flag_distance = left_motor.get_total_distance();
+    right_motor_flag_distance = right_motor.get_total_distance();
 }

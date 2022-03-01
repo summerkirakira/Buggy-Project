@@ -15,7 +15,6 @@ class Motor {
         float measure_period_ms;
         float gear_ratio;
         float total_distance;
-        float distance_flag;
         QEI encoder;
         bool is_left_motor;
 
@@ -28,4 +27,5 @@ class Motor {
         int get_pulses(void);
         void stop(void);
         void start(float power);
+        float get_total_distance();
 };

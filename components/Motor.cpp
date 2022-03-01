@@ -19,7 +19,7 @@ encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
     total_distance = 0;
     current_pulses = 0;
     last_pulses = 0;
-    gear_ratio = 300;
+    gear_ratio = 3 * 0.075 * 3.1415;
     ticker.attach(callback(this, &Motor::measure_speed), 0.05);
 }
 
@@ -40,7 +40,7 @@ void Motor::measure_speed() {
     int encoder_pulses = encoder.getPulses();
     last_pulses = current_pulses;
     current_pulses = encoder_pulses;
-    current_speed = (current_pulses - last_pulses) / measure_period_ms * 1000 * gear_ratio;
+    current_speed = (current_pulses - last_pulses) / 256 * measure_period_ms * 1000 * gear_ratio;
     if(!is_left_motor) {current_speed *= -1;}
     total_distance += measure_period_ms * current_speed / 1000;
 }
@@ -63,4 +63,7 @@ void Motor::start(float power) {
     set_power(power);
 }
 
+float Motor::get_total_distance() {
+    return total_distance;
+}
 

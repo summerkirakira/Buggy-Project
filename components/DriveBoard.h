@@ -37,6 +37,7 @@ class DriveBoard {
         void disable_all();
         void enable_all();
         void turn_left_90();
-        void get_angular();
-        void get_line_distance();
+        float get_angular();
+        float get_line_distance();
+        void set_check_point();
 };
