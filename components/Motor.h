@@ -4,9 +4,8 @@
 class Motor {
     private:
         DigitalOut bipolar;
+        DigitalOut motor_dircetion;
         PwmOut motor_pwm;
-        DigitalIn channel_a;
-        DigitalIn channel_b;
         float current_power;
         float PWM_PERIOD;
         Ticker ticker;
@@ -16,11 +15,15 @@ class Motor {
         float measure_period_ms;
         float gear_ratio;
         QEI encoder;
+        bool is_left_motor;
 
     public:
-        Motor(PinName bipolar, PinName pwm, PinName channel_a, PinName channel_b);
+        Motor(PinName bipolar, PinName dircetion, PinName pwm, PinName channel_a, PinName channel_b, bool is_left);
         float get_velocity(void);
         void set_power(float power);
         float get_power(void);
         void measure_speed(void);
+        int get_pulses(void);
+        void stop(void);
+        void start(float power);
 };

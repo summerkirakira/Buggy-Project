@@ -2,16 +2,24 @@
 #include <./components/Motor.h>
 #include <QEI.h>
 
-Motor::Motor(PinName my_bipolar, PinName pwm, PinName channel_a, PinName channel_b): 
-bipolar(my_bipolar), motor_pwm(pwm), 
-channel_a(channel_a), channel_b(channel_b),
-encoder(channel_a, channel_b, NC, 256) {
-    bipolar = 1;
+Motor::Motor(PinName my_bipolar, PinName dircetion, PinName pwm, PinName channel_a, PinName channel_b, bool is_left): 
+bipolar(my_bipolar), motor_dircetion(dircetion), motor_pwm(pwm), 
+encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
+    if (is_left_motor) {
+        motor_dircetion = 1;
+    } else {
+        motor_dircetion = 0;
+    }
+    bipolar = 0;
     PWM_PERIOD = 10;
     motor_pwm.period_ms(PWM_PERIOD);
+    measure_period_ms = 50;
+    // motor_pwm.write(0.0f);
+    stop();
     current_pulses = 0;
     last_pulses = 0;
-    ticker.attach(callback(this, &Motor::measure_speed), 5ms);
+    gear_ratio = 300;
+    ticker.attach(callback(this, &Motor::measure_speed), 0.05);
 }
 
 void Motor::set_power(float power) {
@@ -28,7 +36,23 @@ float Motor::get_velocity() {
 }
 
 void Motor::measure_speed() {
+    int encoder_pulses = encoder.getPulses();
     last_pulses = current_pulses;
-    current_pulses = encoder.getPulses();
-    current_speed = (current_pulses - last_pulses) / measure_period_ms * gear_ratio;
+    current_pulses = encoder_pulses;
+    current_speed = (current_pulses - last_pulses) / measure_period_ms * 1000 * gear_ratio;
+    if(!is_left_motor) {current_speed *= -1;}
+}
+
+int Motor::get_pulses() {
+    return encoder.getPulses();
+}
+
+void Motor::stop() {
+    bipolar = 0;
+    set_power(0.0f);
+}
+
+void Motor::start(float power) {
+    bipolar = 1;
+    set_power(power);
 }
