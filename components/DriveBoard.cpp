@@ -96,7 +96,7 @@ float DriveBoard::get_angular() {
     // printf("left total distance: %d\n\n", int(left_distance * 1000));
     // printf("left_speed: %d ", int(left_motor.get_velocity() * 1000));
     float right_distance = right_motor.get_total_distance();
-    return ((left_distance - left_motor_flag_distance) - (right_distance - right_motor_flag_distance)) / 0.33;
+    return ((right_distance - right_motor_flag_distance) - (left_distance - left_motor_flag_distance)) / 0.33;
 }
 
 float DriveBoard::get_line_distance() {
