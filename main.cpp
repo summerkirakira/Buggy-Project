@@ -5,6 +5,7 @@ typedef enum {initialisation, stop, straight, turn_left, turn_right} BuggyState;
 BuggyState state = initialisation;
 bool is_manul_stop = false;
 DriveBoard my_drive_board(PA_5, PA_6, PA_7, PC_10, PC_12, PB_6, PA_9,PC_7, PC_3, PC_2, PA_8);
+int turn_left_num = 0;
 
 int main() {
   // my_drive_board.stop_left_motor();
@@ -16,19 +17,27 @@ int main() {
   // }
 
 
-  float base_power = 0.72;
+  float base_left_power = 0.56;
+  float base_right_power = 0.70;
   while(1) {
     switch (state)
     {
     case initialisation:
       // ThisThread::sleep_for(5s);
-      my_drive_board.set_left_motor_power(base_power);
-      my_drive_board.set_right_motor_power(base_power);
+      my_drive_board.start_left_motor(base_left_power);
+      my_drive_board.start_right_motor(base_right_power);
       state = straight;
       my_drive_board.set_check_point();
       break;
     case straight:
+    printf("Going straight...Line distance: %d - angular: %d\n",
+        int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
       if(my_drive_board.get_line_distance() >= 0.5) {
+        if(turn_left_num >= 3) {
+          state = stop;
+          break;
+        };
+        turn_left_num++;
         state = turn_left;
         my_drive_board.stop_left_motor();
         my_drive_board.set_check_point();
@@ -36,11 +45,17 @@ int main() {
       }
       break;
     case turn_left:
+    printf("Turing left...Line distance: %d - angular: %d\n",
+        int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
       if(my_drive_board.get_angular() >= 1) {
         state = straight;
         my_drive_board.set_check_point();
+        my_drive_board.start_left_motor(base_left_power);
         break;
       }
+      break;
+    case stop:
+      my_drive_board.disable_all();
       break;
     default:
       state = stop;

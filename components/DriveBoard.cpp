@@ -69,10 +69,12 @@ void DriveBoard::stop_right_motor() {
 }
 
 void DriveBoard::start_left_motor(float power) {
+    left_motor.set_bipolar(1);
     left_motor.start(power);
 }
 
 void DriveBoard::start_right_motor(float power) {
+    right_motor.set_bipolar(0);
     right_motor.start(power);
 }
 

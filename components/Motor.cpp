@@ -19,14 +19,16 @@ encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
     total_distance = 0;
     current_pulses = 0;
     last_pulses = 0;
-    gear_ratio = 3 * 0.075 * 3.1415;
+    gear_ratio = 3 * 0.075 * 3.1415 * 100;
     total_distance = 0;
     ticker.attach(callback(this, &Motor::measure_speed), 0.05);
 }
 
 void Motor::set_power(float power) {
-    current_power = power;
-    motor_pwm.write(current_power);
+    if(current_power != power){
+        current_power = power;
+        motor_pwm.write(current_power);
+    }
 }
 
 float Motor::get_power() {
@@ -60,11 +62,14 @@ void Motor::stop() {
 }
 
 void Motor::start(float power) {
-    bipolar = 1;
     set_power(power);
 }
 
 float Motor::get_total_distance() {
     return total_distance;
+}
+
+void Motor::set_bipolar(int bipolar) {
+    this->bipolar = bipolar;
 }
 
