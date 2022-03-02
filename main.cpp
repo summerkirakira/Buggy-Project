@@ -1,5 +1,8 @@
 #include <mbed.h>
 #include <./components/DriveBoard.h>
+// #define left right
+// #define right left
+
 
 
 typedef enum {initialisation, stop, straight, turn_left, turn_right, turn_around} BuggyState;
@@ -20,8 +23,8 @@ int main() {
   // }
 
 
-  float base_left_power = 0.56;
-  float base_right_power = 0.70;
+  float base_left_power = 0.68;
+  float base_right_power = 0.68;
   while(1) {
     switch (state)
     {
@@ -50,7 +53,8 @@ int main() {
         if(is_turn_left) {
           turn_left_num++;
           state = turn_left;
-          my_drive_board.stop_left_motor();
+          my_drive_board.start_left_motor(0.25);
+          my_drive_board.start_right_motor(0.68);
           my_drive_board.set_check_point();
         } else {
           turn_right_num++;
@@ -64,7 +68,7 @@ int main() {
     case turn_left:
     printf("Turing left...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      if(my_drive_board.get_angular() >= 1) {
+      if(my_drive_board.get_angular() >= 1.30) {
         state = straight;
         my_drive_board.set_check_point();
         my_drive_board.start_left_motor(base_left_power);
@@ -74,9 +78,9 @@ int main() {
     case turn_around:
     printf("Turing around...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      my_drive_board.start_left_motor(0.42);
+      my_drive_board.start_left_motor(0.25);
       my_drive_board.start_right_motor(base_right_power);
-      if(my_drive_board.get_angular() > 4) {
+      if(my_drive_board.get_angular() > 5) {
         state = straight;
         is_turn_left = false;
         my_drive_board.start_left_motor(base_left_power);
