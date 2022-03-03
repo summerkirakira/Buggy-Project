@@ -23,8 +23,8 @@ int main() {
   // }
 
 
-  float base_left_power = 0.68;
-  float base_right_power = 0.68;
+  float base_left_power = 0.62;
+  float base_right_power = 0.62;
   while(1) {
     switch (state)
     {
@@ -37,7 +37,7 @@ int main() {
     case straight:
     printf("Going straight...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      if(my_drive_board.get_line_distance() >= 0.5) {
+      if(my_drive_board.get_line_distance() >= 0.68) {
         if(turn_left_num >= 3) {
           my_drive_board.set_check_point();
           state = turn_around;
@@ -54,12 +54,12 @@ int main() {
           turn_left_num++;
           state = turn_left;
           my_drive_board.start_left_motor(0.25);
-          my_drive_board.start_right_motor(0.68);
+          my_drive_board.start_right_motor(0.62);
           my_drive_board.set_check_point();
         } else {
           turn_right_num++;
           state = turn_right;
-          my_drive_board.stop_right_motor();
+          my_drive_board.start_right_motor(0.32);
           my_drive_board.set_check_point();
         }
         break;
@@ -68,7 +68,7 @@ int main() {
     case turn_left:
     printf("Turing left...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      if(my_drive_board.get_angular() >= 1.30) {
+      if(my_drive_board.get_angular() >= 1.44) {
         state = straight;
         my_drive_board.set_check_point();
         my_drive_board.start_left_motor(base_left_power);
@@ -78,9 +78,9 @@ int main() {
     case turn_around:
     printf("Turing around...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      my_drive_board.start_left_motor(0.25);
+      my_drive_board.start_left_motor(0.28);
       my_drive_board.start_right_motor(base_right_power);
-      if(my_drive_board.get_angular() > 5) {
+      if(my_drive_board.get_angular() > 2.6) {
         state = straight;
         is_turn_left = false;
         my_drive_board.start_left_motor(base_left_power);
@@ -91,7 +91,7 @@ int main() {
     case turn_right:
       printf("Turing right...Line distance: %d - angular: %d\n",
         int(100*my_drive_board.get_line_distance()), int(100*my_drive_board.get_angular()));
-      if(my_drive_board.get_angular() <= -1) {
+      if(my_drive_board.get_angular() <= -1.5) {
         state = straight;
         my_drive_board.set_check_point();
         my_drive_board.start_right_motor(base_right_power);
