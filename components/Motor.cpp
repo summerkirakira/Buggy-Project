@@ -43,7 +43,7 @@ void Motor::measure_speed() {
     int encoder_pulses = encoder.getPulses();
     last_pulses = current_pulses;
     current_pulses = encoder_pulses;
-    current_speed = float(current_pulses - last_pulses) / 256 * measure_period_ms / 1000 * gear_ratio;
+    current_speed = f loat(current_pulses - last_pulses) / 256 * measure_period_ms / 1000 * gear_ratio;
     if(!is_left_motor) {current_speed *= -1;}
     total_distance += measure_period_ms * current_speed / 1000;
 }
