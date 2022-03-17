@@ -7,7 +7,7 @@ BLE hm10(PA_11, PA_12, LED1);
 DriveBoard my_drive_board(PB_1, PB_15, PA_11, PC_10, PC_12, PB_13, PA_9,PC_7, PC_3, PC_2, PB_14);
 
 int main() {
-  float base_left_power = 0.22;
+  float base_left_power = 0.72;
   float base_right_power = 0.32;
   while(true){
     switch(hm10.get_command()) {

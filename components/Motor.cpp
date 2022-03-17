@@ -49,12 +49,7 @@ int Motor::get_pulses() {
 }
 
 void Motor::stop() {
-    if(is_left_motor) {
-        bipolar = 0;
-        set_power(0.0f);
-    } else {
-        set_power(0.5);
-    }
+    set_power(0.5);
 }
 
 void Motor::start(float power) {
