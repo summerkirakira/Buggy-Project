@@ -5,12 +5,8 @@
 Motor::Motor(PinName my_bipolar, PinName dircetion, PinName pwm, PinName channel_a, PinName channel_b, bool is_left): 
 bipolar(my_bipolar), motor_dircetion(dircetion), motor_pwm(pwm), 
 encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
-    if (is_left_motor) {
-        motor_dircetion = 1;
-    } else {
-        motor_dircetion = 0;
-    }
-    bipolar = 0;
+    motor_dircetion = 1;
+    bipolar = 1;
     PWM_PERIOD = 10;
     motor_pwm.period_ms(PWM_PERIOD);
     measure_period_ms = 50;

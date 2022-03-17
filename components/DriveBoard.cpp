@@ -19,7 +19,7 @@ DriveBoard::DriveBoard(
         left_dirction,
         left_motor_channel_a,
         left_motor_channel_b,
-        true
+        false
     ),
     right_motor(
         right_motor_bipolar,
