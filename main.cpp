@@ -10,13 +10,13 @@ SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4
 
 int main() {
   while (true) {
-    printf("---Sensor voltage---")
-    printf("Sensor 1: %dmV  ", int(my_sensor_board.get_sensor_1_value() * 5000));
-    printf("Sensor 2: %dmV  ", int(my_sensor_board.get_sensor_2_value() * 5000));
-    printf("Sensor 3: %dmV  ", int(my_sensor_board.get_sensor_3_value() * 5000));
-    printf("Sensor 4: %dmV  ", int(my_sensor_board.get_sensor_4_value() * 5000));
-    printf("Sensor 5: %dmV  ", int(my_sensor_board.get_sensor_5_value() * 5000));
-    printf("Sensor 6: %dmV\n", int(my_sensor_board.get_sensor_6_value() * 5000));
+    printf("---Sensor voltage---");
+    printf("Sensor 1: %dmV  ", int(my_sensor_board.get_sensor_1_value() * 3300));
+    printf("Sensor 2: %dmV  ", int(my_sensor_board.get_sensor_2_value() * 3300));
+    printf("Sensor 3: %dmV  ", int(my_sensor_board.get_sensor_3_value() * 3300));
+    printf("Sensor 4: %dmV  ", int(my_sensor_board.get_sensor_4_value() * 3300));
+    printf("Sensor 5: %dmV  ", int(my_sensor_board.get_sensor_5_value() * 3300));
+    printf("Sensor 6: %dmV\n", int(my_sensor_board.get_sensor_6_value() * 3300));
     ThisThread::sleep_for(1s);
   }
 }

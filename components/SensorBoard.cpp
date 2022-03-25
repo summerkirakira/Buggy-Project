@@ -70,5 +70,24 @@ float SensorBoard::get_sensor_5_value() {
 
 float SensorBoard::get_sensor_6_value() {
     float value = sensor_6.read();
+    if(value * 5000 > 300) {
+        value = value * 3;
+        
+    }
+    if(value > 1) {
+        value = 1;
+    }
     return value;
+}
+
+float Apply_PID(float error, float kp, float ki, float kd, float dt) {
+    float output = 0;
+    static float integral = 0;
+    static float last_error = 0;
+    static float derivative = 0;
+    integral += error * dt;
+    derivative = (error - last_error) / dt;
+    output = kp * error + ki * integral + kd * derivative;
+    last_error = error;
+    return output;
 }
