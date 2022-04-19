@@ -29,4 +29,5 @@ class Motor {
         void start(float power);
         float get_total_distance();
         void set_bipolar(int bipolar);
+        int get_bipolar(void);
 };

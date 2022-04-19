@@ -15,16 +15,16 @@ DriveBoard::DriveBoard(
     PinName enable_pin
 ): left_motor(
         left_motor_bipolar,
-        left_motor_pwm,
         left_dirction,
+        left_motor_pwm,
         left_motor_channel_a,
         left_motor_channel_b,
-        false
+        true
     ),
     right_motor(
         right_motor_bipolar,
-        right_motor_pwm,
         right_dirction,
+        right_motor_pwm,
         right_motor_channel_a,
         right_motor_channel_b,
         false
@@ -74,7 +74,7 @@ void DriveBoard::start_left_motor(float power) {
 }
 
 void DriveBoard::start_right_motor(float power) {
-    right_motor.set_bipolar(0);
+    right_motor.set_bipolar(1);
     right_motor.start(power);
 }
 
@@ -110,4 +110,12 @@ float DriveBoard::get_line_distance() {
 void DriveBoard::set_check_point() {
     left_motor_flag_distance = left_motor.get_total_distance();
     right_motor_flag_distance = right_motor.get_total_distance();
+}
+
+float DriveBoard::get_current_speed() {
+    return (get_left_motor_velocity() + get_right_motor_velocity()) / 2;
+}
+
+int DriveBoard::get_right_bipolar() {
+    return right_motor.get_bipolar();
 }

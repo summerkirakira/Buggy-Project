@@ -34,18 +34,11 @@ void SensorBoard::get_sensor_status(){
     sensor_voltage[3] = get_sensor_4_value();
     sensor_voltage[4] = get_sensor_5_value();
     sensor_voltage[5] = get_sensor_6_value();
-    // for(int i=0;i<6;i++) {
-    //     if(sensor_voltage[i] > threshold_value) {
-    //         white_line_position[i] = true;
-    //     } else {
-    //         white_line_position[i] = false;
-    //     }
-    // }
 }
 
 float SensorBoard::get_sensor_1_value() {
     float value = sensor_1.read();
-    return value;
+    return value*3;
 }
 
 float SensorBoard::get_sensor_2_value() {
@@ -60,7 +53,7 @@ float SensorBoard::get_sensor_3_value() {
 
 float SensorBoard::get_sensor_4_value() {
     float value = sensor_4.read();
-    return value;
+    return value*2.6;
 }
 
 float SensorBoard::get_sensor_5_value() {
@@ -70,24 +63,5 @@ float SensorBoard::get_sensor_5_value() {
 
 float SensorBoard::get_sensor_6_value() {
     float value = sensor_6.read();
-    if(value * 5000 > 300) {
-        value = value * 3;
-        
-    }
-    if(value > 1) {
-        value = 1;
-    }
     return value;
-}
-
-float Apply_PID(float error, float kp, float ki, float kd, float dt) {
-    float output = 0;
-    static float integral = 0;
-    static float last_error = 0;
-    static float derivative = 0;
-    integral += error * dt;
-    derivative = (error - last_error) / dt;
-    output = kp * error + ki * integral + kd * derivative;
-    last_error = error;
-    return output;
 }

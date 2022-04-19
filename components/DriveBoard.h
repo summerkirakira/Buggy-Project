@@ -1,3 +1,4 @@
+#pragma once
 #include <mbed.h>
 #include <./components/Motor.h>
 
@@ -39,5 +40,7 @@ class DriveBoard {
         void turn_left_90();
         float get_angular();
         float get_line_distance();
+        float get_current_speed();
         void set_check_point();
+        int get_right_bipolar();
 };

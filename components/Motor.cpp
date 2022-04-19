@@ -10,8 +10,7 @@ encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
     PWM_PERIOD = 10;
     motor_pwm.period_ms(PWM_PERIOD);
     measure_period_ms = 50;
-    // motor_pwm.write(0.0f);
-    stop();
+    // stop();
     total_distance = 0;
     current_pulses = 0;
     last_pulses = 0;
@@ -40,7 +39,7 @@ void Motor::measure_speed() {
     last_pulses = current_pulses;
     current_pulses = encoder_pulses;
     current_speed = float(current_pulses - last_pulses) / 256 * measure_period_ms / 1000 * gear_ratio;
-    if(!is_left_motor) {current_speed *= -1;}
+    // if(!is_left_motor) {current_speed *= -1;}
     total_distance += measure_period_ms * current_speed / 1000;
 }
 
@@ -62,5 +61,9 @@ float Motor::get_total_distance() {
 
 void Motor::set_bipolar(int bipolar) {
     this->bipolar = bipolar;
+}
+
+int Motor::get_bipolar() {
+    return bipolar;
 }
 

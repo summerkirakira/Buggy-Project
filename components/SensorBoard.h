@@ -1,3 +1,4 @@
+#pragma once
 #include <mbed.h>
 
 class SensorBoard {
@@ -8,7 +9,6 @@ class SensorBoard {
         float threshold_value;
         float sensor_voltage[6];
         float white_line_position[6];
-        Ticker my_ticker;
     public: 
         SensorBoard(PinName sensor_1, 
                     PinName sensor_2, 
@@ -29,6 +29,6 @@ class SensorBoard {
         float get_sensor_4_value();
         float get_sensor_5_value();
         float get_sensor_6_value();
-
+        
 
 };
