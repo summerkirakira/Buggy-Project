@@ -29,6 +29,6 @@ class SensorBoard {
         float get_sensor_4_value();
         float get_sensor_5_value();
         float get_sensor_6_value();
-        
+        float * get_all_sensor_value();
 
 };

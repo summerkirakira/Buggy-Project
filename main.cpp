@@ -3,6 +3,7 @@
 #include <./components/DriveBoard.h>
 #include <./components/SensorBoard.h>
 #include <./components/PID.h>
+#include <./algorithm/algorithm.h>
 
 BLE hm10(PA_11, PA_12, LED1);
 DriveBoard my_drive_board(PB_1, PB_15, PC_8, PC_10, PC_12, PA_9, PC_8,PC_7, PC_3, PC_2, PB_14);
@@ -82,19 +83,16 @@ int main() {
   my_drive_board.enable_all();
   my_drive_board.start_left_motor(0.8);
   my_drive_board.start_right_motor(0.6);
-  // while (true)
-  // {
-  //   // printf("%d\n", right_motor.get_bipolar());
-  // }
   while(true) {
-    printf("Sensor 1: %d ", int((my_sensor_board.get_sensor_1_value() * 10000)));
-    printf("Sensor 2: %d  ", int((my_sensor_board.get_sensor_2_value() * 10000)));
-    printf("Sensor 3: %d  ", int((my_sensor_board.get_sensor_3_value() * 10000)));
-    printf("Sensor 4: %d  ", int((my_sensor_board.get_sensor_4_value() * 10000)));
-    printf("Sensor 5: %d  ", int((my_sensor_board.get_sensor_5_value() * 10000)));
-    printf("Sensor 6: %d\n", int((my_sensor_board.get_sensor_6_value() * 10000)));
+    // printf("Sensor 1: %d ", int((my_sensor_board.get_sensor_1_value() * 10000)));
+    // printf("Sensor 2: %d  ", int((my_sensor_board.get_sensor_2_value() * 10000)));
+    // printf("Sensor 3: %d  ", int((my_sensor_board.get_sensor_3_value() * 10000)));
+    // printf("Sensor 4: %d  ", int((my_sensor_board.get_sensor_4_value() * 10000)));
+    // printf("Sensor 5: %d  ", int((my_sensor_board.get_sensor_5_value() * 10000)));
+    // printf("Sensor 6: %d\n", int((my_sensor_board.get_sensor_6_value() * 10000)));
     ThisThread::sleep_for(1s);
-
+    my_sensor_board.get_sensor_status();
+    printf("Line postion: %d\n", int(line_position(my_sensor_board.get_all_sensor_value())* 1000));
   }
 }
 

@@ -65,3 +65,7 @@ float SensorBoard::get_sensor_6_value() {
     float value = sensor_6.read();
     return value;
 }
+
+float * SensorBoard::get_all_sensor_value(){
+    return sensor_voltage;
+}
