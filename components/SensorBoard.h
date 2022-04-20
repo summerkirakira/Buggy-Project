@@ -8,7 +8,12 @@ class SensorBoard {
         DigitalOut switch_1, switch_2, switch_3, switch_4, switch_5, switch_6;
         float threshold_value;
         float sensor_voltage[6];
-        float white_line_position[6];
+        float get_sensor_1_value();
+        float get_sensor_2_value();
+        float get_sensor_3_value();
+        float get_sensor_4_value();
+        float get_sensor_5_value();
+        float get_sensor_6_value();
     public: 
         SensorBoard(PinName sensor_1, 
                     PinName sensor_2, 
@@ -22,13 +27,7 @@ class SensorBoard {
                     PinName switch_4,
                     PinName switch_5,
                     PinName switch_6);
-        void get_sensor_status();
-        float get_sensor_1_value();
-        float get_sensor_2_value();
-        float get_sensor_3_value();
-        float get_sensor_4_value();
-        float get_sensor_5_value();
-        float get_sensor_6_value();
+        void get_sensor_status()；
         float * get_all_sensor_value();
 
 };

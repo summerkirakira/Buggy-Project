@@ -93,13 +93,13 @@ void DriveBoard::turn_left_90() {
   start_left_motor(0.72);
 }
 
-float DriveBoard::get_angular() {
-    float left_distance = left_motor.get_total_distance();
-    // printf("left total distance: %d\n\n", int(left_distance * 1000));
-    // printf("left_speed: %d ", int(left_motor.get_velocity() * 1000));
-    float right_distance = right_motor.get_total_distance();
-    return ((right_distance - right_motor_flag_distance) - (left_distance - left_motor_flag_distance)) / 0.33;
-}
+// float DriveBoard::get_angular() {
+//     float left_distance = left_motor.get_total_distance();
+//     // printf("left total distance: %d\n\n", int(left_distance * 1000));
+//     // printf("left_speed: %d ", int(left_motor.get_velocity() * 1000));
+//     float right_distance = right_motor.get_total_distance();
+//     return ((right_distance - right_motor_flag_distance) - (left_distance - left_motor_flag_distance)) / 0.33;
+// }
 
 float DriveBoard::get_line_distance() {
     float left_distance = left_motor.get_total_distance();
@@ -116,6 +116,6 @@ float DriveBoard::get_current_speed() {
     return (get_left_motor_velocity() + get_right_motor_velocity()) / 2;
 }
 
-int DriveBoard::get_right_bipolar() {
-    return right_motor.get_bipolar();
-}
+// int DriveBoard::get_right_bipolar() {
+//     return right_motor.get_bipolar();
+// }

@@ -2,15 +2,16 @@
 #include <./components/BLE.h>
 #include <./components/DriveBoard.h>
 #include <./components/SensorBoard.h>
-#include <./components/PID.h>
+// #include <./components/PID.h>
 #include <./algorithm/algorithm.h>
+#include <./algorithm/processor.h>
 
 BLE hm10(PA_11, PA_12, LED1);
 DriveBoard my_drive_board(PB_1, PB_15, PC_8, PC_10, PC_12, PA_9, PC_8,PC_7, PC_3, PC_2, PB_14);
 
 
 SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4, PB_5, PB_3, PA_10);
-PID my_pid(&my_drive_board, &my_sensor_board);
+// PID my_pid(&my_drive_board, &my_sensor_board);
 
 enum BuggyState {
     FORWARD,
@@ -81,18 +82,26 @@ int main() {
   my_drive_board.disable_all();
   ThisThread::sleep_for(1000ms);
   my_drive_board.enable_all();
-  my_drive_board.start_left_motor(0.8);
-  my_drive_board.start_right_motor(0.6);
+  my_drive_board.start_left_motor(0.66);
+  my_drive_board.start_right_motor(0.66);
+
+  Processor my_processor(&my_drive_board, &my_sensor_board);
+
+  my_processor.reset();
+  // my_drive_board.disable_all();
   while(true) {
-    // printf("Sensor 1: %d ", int((my_sensor_board.get_sensor_1_value() * 10000)));
-    // printf("Sensor 2: %d  ", int((my_sensor_board.get_sensor_2_value() * 10000)));
-    // printf("Sensor 3: %d  ", int((my_sensor_board.get_sensor_3_value() * 10000)));
-    // printf("Sensor 4: %d  ", int((my_sensor_board.get_sensor_4_value() * 10000)));
-    // printf("Sensor 5: %d  ", int((my_sensor_board.get_sensor_5_value() * 10000)));
-    // printf("Sensor 6: %d\n", int((my_sensor_board.get_sensor_6_value() * 10000)));
-    ThisThread::sleep_for(1s);
+    // my_processor.reset();
     my_sensor_board.get_sensor_status();
-    printf("Line postion: %d\n", int(line_position(my_sensor_board.get_all_sensor_value())* 1000));
+    // printf("current_speed: %d\n", int(my_drive_board.get_current_speed()*10000));
+    // if(my_drive_board.get_left_motor_power() < 0.5) {
+    //   printf("current_left_motor_power: %d  ", int(my_drive_board.get_left_motor_power()* 10000));
+    // }
+    // printf("current_left_motor_power: %d  ", int(my_drive_board.get_left_motor_power()* 10000));
+    // printf("current_right_motor_power: %d\n", int(my_drive_board.get_right_motor_power()* 10000));
+    my_drive_board.set_left_motor_power(my_processor.get_left_recommend_power());
+    my_drive_board.set_right_motor_power(my_processor.get_right_recommend_power());
+    // ThisThread::sleep_for(10ms);
+    // printf("Line postion: %d\n", int(line_position(my_sensor_board.get_all_sensor_value()) * 10000));
   }
 }
 

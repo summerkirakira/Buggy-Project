@@ -20,6 +20,8 @@ encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
 }
 
 void Motor::set_power(float power) {
+    // if (power < 0.3) return;
+    // if (power > 0.8) return;
     if(current_power != power){
         current_power = power;
         motor_pwm.write(current_power);
