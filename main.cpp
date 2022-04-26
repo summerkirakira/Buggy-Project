@@ -14,8 +14,6 @@ SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4
 
 bool is_back_to_line = false;
 
-bool has_turned_around = false;
-
 void set_nomal_state() {
     is_back_to_line = true;
 }
@@ -23,7 +21,7 @@ void set_nomal_state() {
 void state_machine() {
   BuggyState state = FORWARD;
   Processor my_processor(&my_drive_board, &my_sensor_board);
-  Timeout timeout;
+  bool has_turned_around = false;
   while (true)
   {
     if (hm10.get_command() == start) {
@@ -31,7 +29,7 @@ void state_machine() {
       break;
     }
   }
-  my_processor.set_gain(0.15, 100, 0.001, 0.08);
+  my_processor.set_gain(0.3, 100, 0.001, 0.08);
   my_processor.reset();
   while (true)
   {
@@ -49,6 +47,12 @@ void state_machine() {
     // } else if (hm10.get_command() == speed_down) {
     //   state = FORWARD;
     // }
+
+    if (hm10.get_command() == turn_around and !has_turned_around) {
+      state = TURN_AROUND;
+      has_turned_around = true;
+    } 
+
     switch(state) {
       case FORWARD:
         my_sensor_board.get_sensor_status();
@@ -67,20 +71,20 @@ void state_machine() {
         // ThisThread::sleep_for(10ms);
         break;
       case TURN_AROUND:
-        if(has_turned_around) {
-          state = STOP;
-          break;
-        }
+        // if(has_turned_around) {
+        //   state = STOP;
+        //   break;
+        // }
 
         my_drive_board.set_left_motor_power(0.30);
         my_drive_board.set_right_motor_power(0.7);
-        // ThisThread::sleep_for(100ms);
+        ThisThread::sleep_for(1000ms);
         my_processor.set_gain(0.15, 100, 0.000, 0.08);
         my_sensor_board.get_sensor_status();
         while (line_position(my_sensor_board.get_all_sensor_value()) > 5000) { my_sensor_board.get_sensor_status(); }
         state = FORWARD;
         // my_processor.set_gain(0.15, 100, 0.001, 0.08);
-        // my_processor.soft_reset();
+        my_processor.soft_reset();
         // has_turned_around = true;
         break;
       case STOP:
@@ -97,7 +101,7 @@ void state_machine() {
       my_drive_board.set_right_motor_power(1);
       ThisThread::sleep_for(10ms);
     } else {
-      ThisThread::sleep_for(0.001);
+      ThisThread::sleep_for(0.005);
     }
     
   }
@@ -112,8 +116,8 @@ int main() {
   // my_drive_board.start_left_motor(0.5);
   // my_drive_board.start_right_motor(0.5);
   // ThisThread::sleep_for(100ms);
-  state_machine();
   while(true) {
+    state_machine();
   }
 }
 

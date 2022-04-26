@@ -43,7 +43,7 @@ void Processor::trace_line() {
 
         float current_left_motor_power = drive_board->get_left_motor_power();
         float current_right_motor_power = drive_board->get_right_motor_power();
-        float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
+        // float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
         this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
         this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
 
@@ -55,10 +55,10 @@ void Processor::trace_line() {
             this->recommend_right_motor_power = 0.5;
         }
 
-    } else if (this->buggy_state != TURN_AROUND) {
+    } else {
         period_count += 1;
-        if(period_count > 200) {
-            this->buggy_state = TURN_AROUND;
+        if(period_count > 50) {
+            this->buggy_state = STOP;
             this->period_count = 0;
             // this->reset();
         }
@@ -97,11 +97,13 @@ void Processor::reset() {
     this->perivious_error = 0;
     this->derivative_error = 0;
     this->integral_error = 0;
+    this->buggy_state = FORWARD;
     period_count = 0;
 }
 
 void Processor::soft_reset() {
     this->integral_error = 0;
+    this->buggy_state = FORWARD;
     period_count = 0;
 }
 

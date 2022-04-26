@@ -28,6 +28,8 @@ void BLE::on_rx_interrupt(void) {
             command = speed_up;
         } else if (c == 'o') {
             command = speed_down;
+        } else if (c== 't') {
+            command = turn_around;
         }
     }
 }
