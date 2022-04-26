@@ -22,7 +22,6 @@ SensorBoard::SensorBoard(PinName sensor_1, PinName sensor_2,
                             threshold_value = 0.1;
                             for(int i=0; i<6; i++){
                                 sensor_voltage[i] = 0;
-                                white_line_position[i] = false;
                             }
                             // my_ticker.attach(callback(this, &SensorBoard::get_sensor_status), 10ms);
                         }
@@ -34,16 +33,22 @@ void SensorBoard::get_sensor_status(){
     sensor_voltage[3] = get_sensor_4_value();
     sensor_voltage[4] = get_sensor_5_value();
     sensor_voltage[5] = get_sensor_6_value();
+    // printf("sensor_voltage 1: %d  ", int(10000* sensor_voltage[0]));
+    // printf("sensor_voltage 2: %d  ", int(10000* sensor_voltage[1]));
+    // printf("sensor_voltage 3: %d  ", int(10000* sensor_voltage[2]));
+    // printf("sensor_voltage 4: %d  ", int(10000* sensor_voltage[3]));
+    // printf("sensor_voltage 5: %d  ", int(10000* sensor_voltage[4]));
+    // printf("sensor_voltage 6: %d  \n", int(10000* sensor_voltage[5]));
 }
 
 float SensorBoard::get_sensor_1_value() {
     float value = sensor_1.read();
-    return value*3;
+    return value;
 }
 
 float SensorBoard::get_sensor_2_value() {
     float value = sensor_2.read();
-    return value;
+    return value * 0.9;
 }
 
 float SensorBoard::get_sensor_3_value() {
@@ -53,12 +58,12 @@ float SensorBoard::get_sensor_3_value() {
 
 float SensorBoard::get_sensor_4_value() {
     float value = sensor_4.read();
-    return value*2.6;
+    return value;
 }
 
 float SensorBoard::get_sensor_5_value() {
     float value = sensor_5.read();
-    return value;
+    return value * 0.9;
 }
 
 float SensorBoard::get_sensor_6_value() {

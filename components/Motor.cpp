@@ -6,26 +6,25 @@ Motor::Motor(PinName my_bipolar, PinName dircetion, PinName pwm, PinName channel
 bipolar(my_bipolar), motor_dircetion(dircetion), motor_pwm(pwm), 
 encoder(channel_a, channel_b, NC, 256), is_left_motor(is_left) {
     motor_dircetion = 1;
-    bipolar = 1;
     PWM_PERIOD = 10;
     motor_pwm.period_ms(PWM_PERIOD);
-    measure_period_ms = 50;
-    // stop();
+    measure_period_ms = 10;
     total_distance = 0;
     current_pulses = 0;
     last_pulses = 0;
     gear_ratio = 3 * 0.075 * 3.1415 * 100;
     total_distance = 0;
-    ticker.attach(callback(this, &Motor::measure_speed), 0.05);
+    bipolar = 1;
+    ticker.attach(callback(this, &Motor::measure_speed), 0.01);
 }
 
 void Motor::set_power(float power) {
-    // if (power < 0.3) return;
-    // if (power > 0.8) return;
-    if(current_power != power){
-        current_power = power;
-        motor_pwm.write(current_power);
-    }
+    // if (power < 0.5) return;
+    if (power > 1) return;
+    // if(!(current_power - power < 0.0001 && current_power - power > -0.0001)){
+    current_power = power;
+    motor_pwm.write(current_power);
+    // }
 }
 
 float Motor::get_power() {

@@ -13,8 +13,8 @@ class DriveBoard {
     public:
         DriveBoard(
             PinName left_motor_bipolar,
-            PinName left_motor_pwm,
             PinName left_dirction,
+            PinName left_motor_pwm,
             PinName left_motor_channel_a,
             PinName left_motor_channel_b,
             PinName right_motor_bipolar,

@@ -54,8 +54,10 @@ float line_position(float sensor_voltage[6]){
     float highest_voltage = -1;
     float second_highest_voltage = -1;
     float left_sensors_voltage_sum = 0;
+    bool is_lost_track = true;
     for(int i=0; i<6; i++){
         // printf("sensor_voltage[%d] = %d\n", i, int(sensor_voltage[i]*10000));
+        if (sensor_voltage[i] > 0.2) is_lost_track = false;
         if(sensor_voltage[i] > highest_voltage){
             second_highest_voltage = highest_voltage;
             second_highest_position = highest_position;
@@ -67,6 +69,9 @@ float line_position(float sensor_voltage[6]){
             second_highest_position = i;
         }
         left_sensors_voltage_sum += sensor_voltage[i];
+    }
+    if(is_lost_track){
+        return 10000;
     }
     left_sensors_voltage_sum = left_sensors_voltage_sum - highest_voltage - second_highest_voltage;
 
@@ -89,10 +94,24 @@ float line_position(float sensor_voltage[6]){
             float highest_position_weights = highest_position * 0.4 - 1;
             float left_positon_weights = (highest_position - 1) * 0.4 - 1;
             float right_position_weights = (highest_position + 1) * 0.4 - 1;
+            // float left_total_voltage = sensor_voltage[highest_position - 1] + sensor_voltage[highest_position + 1] + sensor_voltage[highest_position];
             return left_positon_weights * sensor_voltage[highest_position - 1] + right_position_weights * sensor_voltage[highest_position + 1] + highest_position_weights * sensor_voltage[highest_position];
         }
         
     } else {
         return 10000;
+    }
+}
+
+float speed_control(float current_speed, float target_speed, float speed_gain){
+    float speed_output = speed_gain * (target_speed - current_speed);
+    return speed_output;
+}
+
+float calculate_time_delay(float current_speed) {
+    if (current_speed > 0.02) {
+        return 0.05;
+    } else {
+        return 0.2 * (1-current_speed / 0.02);
     }
 }

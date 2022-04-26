@@ -27,7 +27,7 @@ class SensorBoard {
                     PinName switch_4,
                     PinName switch_5,
                     PinName switch_6);
-        void get_sensor_status()；
+        void get_sensor_status();
         float * get_all_sensor_value();
 
 };

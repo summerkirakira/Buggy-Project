@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.5
+#define SPEED_LIMIT 0.05
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -15,10 +15,11 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->perivious_error = 0;
     this->derivative_error = 0;
     this->integral_error = 0;
+    this->buggy_state = FORWARD;
 
     this->period_count = 0;
 
-    this->set_gain(0.01, 0.00000, 0.0000, 0.5);
+    this->set_gain(0.01, 0, 0, 0);
 
     my_ticker.attach(callback(this, &Processor::trace_line), 1ms);
 }
@@ -26,6 +27,7 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
 void Processor::trace_line() {
     float error = -1 * line_position(sensor_board->get_all_sensor_value());
     if (error > -2000) {
+        this->buggy_state = FORWARD;
         period_count = 0;
         this->perivious_error = this->current_error;
         this->current_error = error;
@@ -33,18 +35,20 @@ void Processor::trace_line() {
         this->integral_error += this->current_error;
         // float speed_parameter = drive_board->get_current_speed() / 0.02 > 1 ? 1 : drive_board->get_current_speed() / 0.02;
         float turning_power = apply_pid_control();
+        float speed_power = speed_control(drive_board->get_current_speed(), SPEED_LIMIT, this->speed_gain);
+
+
         float current_left_motor_power = drive_board->get_left_motor_power();
         float current_right_motor_power = drive_board->get_right_motor_power();
         float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
-        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
-        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
-    } else {
+        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
+        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
+    } else if (this->buggy_state != TURN_AROUND) {
         period_count += 1;
-        if(period_count > 60) {
-            this->recommend_left_motor_power = 0.5;
-            this->recommend_right_motor_power = 0.5;
+        if(period_count > 200) {
+            this->buggy_state = TURN_AROUND;
+            this->reset();
         }
-        
     }
 }
 
@@ -74,10 +78,15 @@ float Processor::get_right_recommend_power() {
 }
 
 void Processor::reset() {
-    recommend_left_motor_power = 0.9;
-    recommend_right_motor_power = 0.9;
+    recommend_left_motor_power = 0.95;
+    recommend_right_motor_power = 0.95;
     this->current_error = 0;
     this->perivious_error = 0;
     this->derivative_error = 0;
     this->integral_error = 0;
+    period_count = 0;
+}
+
+BuggyState Processor::get_buggy_state() {
+    return this->buggy_state;
 }

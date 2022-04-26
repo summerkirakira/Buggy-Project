@@ -3,8 +3,8 @@
 
 DriveBoard::DriveBoard(
     PinName left_motor_bipolar,
-    PinName left_motor_pwm,
     PinName left_dirction,
+    PinName left_motor_pwm,
     PinName left_motor_channel_a,
     PinName left_motor_channel_b,
     PinName right_motor_bipolar,
@@ -19,7 +19,7 @@ DriveBoard::DriveBoard(
         left_motor_pwm,
         left_motor_channel_a,
         left_motor_channel_b,
-        true
+        false
     ),
     right_motor(
         right_motor_bipolar,
