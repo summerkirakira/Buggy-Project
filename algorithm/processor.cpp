@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.05
+#define SPEED_LIMIT 0.04
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -25,6 +25,9 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
 }
 
 void Processor::trace_line() {
+    // float speed_power = speed_control(drive_board->get_current_speed(), SPEED_LIMIT, this->speed_gain);
+    // this->recommend_right_motor_power =  drive_board->get_left_motor_power() + speed_power;
+    // this->recommend_right_motor_power = drive_board->get_right_motor_power() + speed_power;
     float error = -1 * line_position(sensor_board->get_all_sensor_value());
     if (error > -2000) {
         this->buggy_state = FORWARD;
@@ -43,11 +46,21 @@ void Processor::trace_line() {
         float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
         this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
         this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
+
+        if(this->recommend_left_motor_power < 0.5) {
+            this->recommend_left_motor_power = 0.5;
+        }
+
+        if(this->recommend_right_motor_power < 0.5) {
+            this->recommend_right_motor_power = 0.5;
+        }
+
     } else if (this->buggy_state != TURN_AROUND) {
         period_count += 1;
         if(period_count > 200) {
             this->buggy_state = TURN_AROUND;
-            this->reset();
+            this->period_count = 0;
+            // this->reset();
         }
     }
 }
@@ -83,6 +96,11 @@ void Processor::reset() {
     this->current_error = 0;
     this->perivious_error = 0;
     this->derivative_error = 0;
+    this->integral_error = 0;
+    period_count = 0;
+}
+
+void Processor::soft_reset() {
     this->integral_error = 0;
     period_count = 0;
 }

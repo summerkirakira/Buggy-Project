@@ -30,6 +30,7 @@ class Processor {
         float recommend_left_motor_power;
         float recommend_right_motor_power;
         void reset();
+        void soft_reset();
         float get_left_recommend_power();
         float get_right_recommend_power();
         BuggyState get_buggy_state();
