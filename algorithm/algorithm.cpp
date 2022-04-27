@@ -54,6 +54,7 @@ float line_position(float sensor_voltage[6]){
     float highest_voltage = -1;
     float second_highest_voltage = -1;
     float left_sensors_voltage_sum = 0;
+    float sensor_with_weight = 0;
     bool is_lost_track = true;
     for(int i=0; i<6; i++){
         // printf("sensor_voltage[%d] = %d\n", i, int(sensor_voltage[i]*10000));
@@ -69,15 +70,21 @@ float line_position(float sensor_voltage[6]){
             second_highest_position = i;
         }
         left_sensors_voltage_sum += sensor_voltage[i];
+        sensor_with_weight += sensor_voltage[i] * (i * 0.4 - 1);
     }
+
     if(is_lost_track){
         return 10000;
     }
+
+    
+
     left_sensors_voltage_sum = left_sensors_voltage_sum - highest_voltage - second_highest_voltage;
 
     // printf("left_sensors_voltage_sum = %d\n", int(left_sensors_voltage_sum*10000));
 
     if((highest_position - second_highest_position == 1)||(highest_position - second_highest_position == -1) ) {
+
         if (highest_position == 5 || highest_position == 0) {
             highest_voltage -= left_sensors_voltage_sum / 4;
             second_highest_voltage -= left_sensors_voltage_sum / 4;
@@ -91,11 +98,12 @@ float line_position(float sensor_voltage[6]){
                 return second_highest_position_weights + (highest_voltage / (highest_voltage + second_highest_voltage)) * 0.4;
             }
         } else {
-            float highest_position_weights = highest_position * 0.4 - 1;
-            float left_positon_weights = (highest_position - 1) * 0.4 - 1;
-            float right_position_weights = (highest_position + 1) * 0.4 - 1;
-            // float left_total_voltage = sensor_voltage[highest_position - 1] + sensor_voltage[highest_position + 1] + sensor_voltage[highest_position];
-            return left_positon_weights * sensor_voltage[highest_position - 1] + right_position_weights * sensor_voltage[highest_position + 1] + highest_position_weights * sensor_voltage[highest_position];
+            // float highest_position_weights = highest_position * 0.4 - 1;
+            // float left_positon_weights = (highest_position - 1) * 0.4 - 1;
+            // float right_position_weights = (highest_position + 1) * 0.4 - 1;
+            // // float left_total_voltage = sensor_voltage[highest_position - 1] + sensor_voltage[highest_position + 1] + sensor_voltage[highest_position];
+            // return left_positon_weights * sensor_voltage[highest_position - 1] + right_position_weights * sensor_voltage[highest_position + 1] + highest_position_weights * sensor_voltage[highest_position];
+            return sensor_with_weight * 2;
         }
         
     } else {

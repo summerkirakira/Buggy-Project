@@ -22,6 +22,15 @@ void state_machine() {
   BuggyState state = FORWARD;
   Processor my_processor(&my_drive_board, &my_sensor_board);
   bool has_turned_around = false;
+
+
+  // while (true)
+  //   {
+  //     my_sensor_board.get_sensor_status();
+  //     printf("current_position: %d\n", int(line_position(my_sensor_board.get_all_sensor_value()) * 10000));
+  //   }
+
+
   while (true)
   {
     if (hm10.get_command() == start) {
@@ -29,7 +38,7 @@ void state_machine() {
       break;
     }
   }
-  my_processor.set_gain(0.3, 100, 0.001, 0.08);
+  my_processor.set_gain(0.3, 200, 0.0000, 0.001);
   my_processor.reset();
   while (true)
   {
@@ -52,20 +61,28 @@ void state_machine() {
       state = TURN_AROUND;
       has_turned_around = true;
     } 
+    // my_drive_board.disable_all();
+
+    
+    
 
     switch(state) {
       case FORWARD:
         my_sensor_board.get_sensor_status();
 
 
+        // my_drive_board.disable_all();
         // printf("current_left_motor_power: %d  ", int(my_drive_board.get_left_motor_power()* 10000));
         // printf("current_right_motor_power: %d\n", int(my_drive_board.get_right_motor_power()* 10000));
         // printf("sensor_6: %d  \n", int(my_sensor_board.get_all_sensor_value()[0]));
         // printf("current left motor speed: %d\n", int((my_drive_board.get_current_speed()) * 10000));
 
 
+
+
         my_drive_board.set_left_motor_power(my_processor.get_left_recommend_power());
         my_drive_board.set_right_motor_power(my_processor.get_right_recommend_power());
+
 
 
         // ThisThread::sleep_for(10ms);
@@ -79,11 +96,11 @@ void state_machine() {
         my_drive_board.set_left_motor_power(0.30);
         my_drive_board.set_right_motor_power(0.7);
         ThisThread::sleep_for(1000ms);
-        my_processor.set_gain(0.15, 100, 0.000, 0.08);
+        my_processor.set_gain(0.25, 400, 0.0000, 0.08);
         my_sensor_board.get_sensor_status();
         while (line_position(my_sensor_board.get_all_sensor_value()) > 5000) { my_sensor_board.get_sensor_status(); }
         state = FORWARD;
-        // my_processor.set_gain(0.15, 100, 0.001, 0.08);
+        my_processor.set_gain(0.25, 400, 0.0000, 0.08);
         my_processor.soft_reset();
         // has_turned_around = true;
         break;
@@ -94,15 +111,15 @@ void state_machine() {
     state = my_processor.get_buggy_state();
     // ThisThread::sleep_for(0.0005);
     // ThisThread::sleep_for(5 * (1-(my_drive_board.get_current_speed() / 0.04) * (my_drive_board.get_current_speed() / 0.04)));
-    if(state != TURN_AROUND && !is_back_to_line && 
-      my_drive_board.get_current_speed() > -0.01 &&
-      my_drive_board.get_current_speed() < 0.02) {
-      my_drive_board.set_left_motor_power(1);
-      my_drive_board.set_right_motor_power(1);
-      ThisThread::sleep_for(10ms);
-    } else {
-      ThisThread::sleep_for(0.005);
-    }
+    // if(state != TURN_AROUND && !is_back_to_line && 
+    //   my_drive_board.get_current_speed() > -0.01 &&
+    //   my_drive_board.get_current_speed() < 0.02) {
+    //   my_drive_board.set_left_motor_power(1);
+    //   my_drive_board.set_right_motor_power(1);
+    //   ThisThread::sleep_for(8ms);
+    // } else {
+    ThisThread::sleep_for(50ms);
+    // }
     
   }
   
