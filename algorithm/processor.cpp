@@ -44,20 +44,20 @@ void Processor::trace_line() {
         float current_left_motor_power = drive_board->get_left_motor_power();
         float current_right_motor_power = drive_board->get_right_motor_power();
         // float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
-        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
-        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
+        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
+        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
 
-        if(this->recommend_left_motor_power < 0.5) {
+        if(this->recommend_left_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
             this->recommend_left_motor_power = 0.5;
         }
 
-        if(this->recommend_right_motor_power < 0.5) {
+        if(this->recommend_right_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
             this->recommend_right_motor_power = 0.5;
         }
 
     } else {
         period_count += 1;
-        if(period_count > 50) {
+        if(period_count > 200) {
             this->buggy_state = STOP;
             this->period_count = 0;
             // this->reset();

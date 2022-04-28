@@ -81,7 +81,7 @@ void state_machine() {
         ThisThread::sleep_for(1000ms);
         my_processor.set_gain(0.15, 100, 0.000, 0.08);
         my_sensor_board.get_sensor_status();
-        while (line_position(my_sensor_board.get_all_sensor_value()) > 5000) { my_sensor_board.get_sensor_status(); }
+        while (line_position(my_sensor_board.get_all_sensor_value()) > 6000) { my_sensor_board.get_sensor_status(); }
         state = FORWARD;
         // my_processor.set_gain(0.15, 100, 0.001, 0.08);
         my_processor.soft_reset();
