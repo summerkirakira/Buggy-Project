@@ -14,10 +14,17 @@ SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4
 
 void state_machine() {
   Processor my_processor(&my_drive_board, &my_sensor_board);
-  my_processor.set_gain(0.003, 1, 0.000, 0.08);
+  my_processor.set_gain(0.007, 1, 0.000 , 0.06);
+  while (true)
+  {
+    if (hm10.get_command() == start) {
+      my_drive_board.enable_all();
+      break;
+    }
+  }
   my_processor.reset();
-  my_drive_board.set_left_motor_power(0.65);
-  my_drive_board.set_right_motor_power(0.65);
+  my_drive_board.set_left_motor_power(0.75);
+  my_drive_board.set_right_motor_power(0.75);
   my_drive_board.enable_all();
   // my_drive_board.enable_all();
   while (true) {
