@@ -57,7 +57,7 @@ void Processor::trace_line() {
 
     } else {
         period_count += 1;
-        if(period_count > 200) {
+        if(period_count > 220) {
             this->buggy_state = STOP;
             this->period_count = 0;
             // this->reset();
