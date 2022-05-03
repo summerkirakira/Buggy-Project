@@ -21,7 +21,7 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
 
     this->set_gain(0.01, 0, 0, 0);
 
-    my_ticker.attach(callback(this, &Processor::trace_line), 1ms);
+    my_ticker.attach(callback(this, &Processor::trace_line), 5ms);
 }
 
 void Processor::trace_line() {
@@ -44,22 +44,28 @@ void Processor::trace_line() {
         float current_left_motor_power = drive_board->get_left_motor_power();
         float current_right_motor_power = drive_board->get_right_motor_power();
         // float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
-        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
-        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
+        // this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
+        // this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
 
-        if(this->recommend_left_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
-            this->recommend_left_motor_power = 0.5;
-        }
+        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
+        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
 
-        if(this->recommend_right_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
-            this->recommend_right_motor_power = 0.5;
-        }
+        // if(this->recommend_left_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
+        //     this->recommend_left_motor_power = 0.5;
+        // }
+
+        // if(this->recommend_right_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
+        //     this->recommend_right_motor_power = 0.5;
+        // }
+        drive_board->set_left_motor_power(this->recommend_left_motor_power);
+        drive_board->set_right_motor_power(this->recommend_right_motor_power);
 
     } else {
         period_count += 1;
         if(period_count > 220) {
             this->buggy_state = STOP;
             this->period_count = 0;
+            drive_board->disable_all();
             // this->reset();
         }
     }
@@ -91,8 +97,8 @@ float Processor::get_right_recommend_power() {
 }
 
 void Processor::reset() {
-    recommend_left_motor_power = 0.95;
-    recommend_right_motor_power = 0.95;
+    recommend_left_motor_power = 0.65;
+    recommend_right_motor_power = 0.65;
     this->current_error = 0;
     this->perivious_error = 0;
     this->derivative_error = 0;
