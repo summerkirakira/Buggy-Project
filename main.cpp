@@ -14,7 +14,7 @@ SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4
 
 void state_machine() {
   Processor my_processor(&my_drive_board, &my_sensor_board);
-   my_processor.set_gain(0.007, 1, 0.000 , 0.06);
+   my_processor.set_gain(0.007, 1, 0.000 , 0.07);
   while (true)
   {
     if (hm10.get_command() == start) {
@@ -30,6 +30,23 @@ void state_machine() {
   while (true) {
     // my_drive_board.disable_all();
      my_sensor_board.get_sensor_status(); 
+
+     if (hm10.get_command() == turn_around) {
+       hm10.reset();
+       my_processor.stop_tracing();
+       my_drive_board.set_left_motor_power(0.5);
+       my_drive_board.set_right_motor_power(0.5);
+       ThisThread::sleep_for(400ms);
+       my_drive_board.set_left_motor_power(0.2);
+       my_drive_board.set_right_motor_power(0.75);
+       ThisThread::sleep_for(500ms);
+       my_sensor_board.get_sensor_status();
+       while (line_position(my_sensor_board.get_all_sensor_value()) > 6000) { my_sensor_board.get_sensor_status(); }
+       my_drive_board.set_left_motor_power(0.75);
+       my_drive_board.set_right_motor_power(0.75);
+       my_processor.reset();
+       my_processor.start_tracing();
+     }
     //  printf("%d ", int(line_position(my_sensor_board.get_all_sensor_value()) * 10000));
     //  printf("current speed%d ", int(my_drive_board.get_current_speed() * 10000));
     //  printf("left_motor_power: %d ", int(my_drive_board.get_left_motor_power() * 10000));

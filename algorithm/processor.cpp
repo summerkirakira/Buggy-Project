@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.08
+#define SPEED_LIMIT 0.07
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -21,7 +21,7 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
 
     this->set_gain(0.01, 0, 0, 0);
 
-    my_ticker.attach(callback(this, &Processor::trace_line), 5ms);
+    start_tracing();
 }
 
 void Processor::trace_line() {
@@ -67,7 +67,7 @@ void Processor::trace_line() {
 
     } else {
         period_count += 1;
-        if(period_count > 200 || (this->perivious_error < 0.5 && this->perivious_error > -0.5)) {
+        if(period_count > 200 || (this->perivious_error < 0.65 && this->perivious_error > -0.65)) {
             this->buggy_state = STOP;
             this->period_count = 0;
             drive_board->set_left_motor_power(0.5);
@@ -103,8 +103,8 @@ float Processor::get_right_recommend_power() {
 }
 
 void Processor::reset() {
-    recommend_left_motor_power = 0.65;
-    recommend_right_motor_power = 0.65;
+    recommend_left_motor_power = 0.75;
+    recommend_right_motor_power = 0.75;
     this->current_error = 0;
     this->perivious_error = 0;
     this->derivative_error = 0;
@@ -118,6 +118,15 @@ void Processor::soft_reset() {
     this->buggy_state = FORWARD;
     period_count = 0;
 }
+
+void Processor::start_tracing() {
+    my_ticker.attach(callback(this, &Processor::trace_line), 5ms);
+}
+
+void Processor::stop_tracing() {
+    my_ticker.detach();
+}
+
 
 BuggyState Processor::get_buggy_state() {
     return this->buggy_state;

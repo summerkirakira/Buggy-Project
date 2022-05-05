@@ -1,6 +1,6 @@
 #include <mbed.h>
 
-enum command_set { start, stop, pause, resume, left, right, speed_up, speed_down, turn_around };
+enum command_set { start, stop, pause, resume, left, right, speed_up, speed_down, turn_around, undefined };
 class BLE {
     private:
         UnbufferedSerial hm10;
@@ -11,4 +11,5 @@ class BLE {
     public:
         BLE(PinName hm1, PinName hm2, PinName StatusLED);
         command_set get_command();
+        void reset();
 };

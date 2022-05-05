@@ -9,7 +9,7 @@ BLE::BLE(PinName hm1, PinName hm2, PinName status_led): hm10(hm1, hm2), status_l
         /* stop bit */ 1
     );
     hm10.attach(callback(this, &BLE::on_rx_interrupt));
-    command = stop;
+    command = undefined;
 }
 
 void BLE::on_rx_interrupt(void) {
@@ -32,6 +32,10 @@ void BLE::on_rx_interrupt(void) {
             command = turn_around;
         }
     }
+}
+
+void BLE::reset() {
+    this->command = undefined;
 }
 
 command_set BLE::get_command() {

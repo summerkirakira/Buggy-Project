@@ -35,4 +35,6 @@ class Processor {
         float get_right_recommend_power();
         BuggyState get_buggy_state();
         void set_gain(float proportional_gain, float derivative_gain, float integral_gain, float speed_gain);
+        void start_tracing();
+        void stop_tracing();
 };
