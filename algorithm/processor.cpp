@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.04
+#define SPEED_LIMIT 0.08
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -47,8 +47,13 @@ void Processor::trace_line() {
         // this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
         // this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
 
-        this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
-        this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
+        if(drive_board->get_left_motor_power() > 1 || drive_board->get_right_motor_power() > 1 || (error < -0.5 && error > 0.5)) {
+            this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
+            this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
+        } else {
+            this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
+            this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
+        }
 
         // if(this->recommend_left_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
         //     this->recommend_left_motor_power = 0.5;
@@ -62,10 +67,11 @@ void Processor::trace_line() {
 
     } else {
         period_count += 1;
-        if(period_count > 220) {
+        if(period_count > 200 || (this->perivious_error < 0.5 && this->perivious_error > -0.5)) {
             this->buggy_state = STOP;
             this->period_count = 0;
-            drive_board->disable_all();
+            drive_board->set_left_motor_power(0.5);
+            drive_board->set_right_motor_power(0.5);
             // this->reset();
         }
     }
