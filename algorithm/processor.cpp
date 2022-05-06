@@ -67,12 +67,14 @@ void Processor::trace_line() {
 
     } else {
         period_count += 1;
-        if(period_count > 200 || (this->perivious_error < 0.65 && this->perivious_error > -0.65)) {
-            this->buggy_state = STOP;
-            this->period_count = 0;
-            drive_board->set_left_motor_power(0.5);
-            drive_board->set_right_motor_power(0.5);
-            // this->reset();
+        if(period_count > 140 || (this->perivious_error < 0.45 && this->perivious_error > -0.45)) {
+            if (this->period_count > 10){
+                this->buggy_state = STOP;
+                this->period_count = 0;
+                drive_board->set_left_motor_power(0.5);
+                drive_board->set_right_motor_power(0.5);
+                // this->reset();
+            }
         }
     }
 }
