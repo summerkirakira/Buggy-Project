@@ -30,6 +30,7 @@ DriveBoard::DriveBoard(
         false
     ), enable(enable_pin) {
     enable = 1;
+    is_auto_mode = true;
 }
 
 float DriveBoard::get_left_motor_power() {
@@ -115,6 +116,19 @@ void DriveBoard::set_check_point() {
 float DriveBoard::get_current_speed() {
     return (get_left_motor_velocity() + get_right_motor_velocity()) / 2;
 }
+
+void DriveBoard::soft_set_left_motor_power(float power) {
+    if(is_auto_mode) {
+        left_motor.set_power(power);
+    }
+}
+
+void DriveBoard::soft_set_right_motor_power(float power) {
+    if(is_auto_mode) {
+        right_motor.set_power(power);
+    }
+}
+
 
 // int DriveBoard::get_right_bipolar() {
 //     return right_motor.get_bipolar();
