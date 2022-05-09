@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.07
+#define SPEED_LIMIT 0.082
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -113,8 +113,8 @@ float Processor::get_right_recommend_power() {
 }
 
 void Processor::reset() {
-    recommend_left_motor_power = 0.75;
-    recommend_right_motor_power = 0.75;
+    recommend_left_motor_power = 0.7;
+    recommend_right_motor_power = 0.7;
     this->current_error = 0;
     this->perivious_error = 0;
     this->derivative_error = 0;
