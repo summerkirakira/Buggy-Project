@@ -57,7 +57,7 @@ float line_position(float sensor_voltage[6]){
     bool is_lost_track = true;
     for(int i=0; i<6; i++){
         // printf("sensor_voltage[%d] = %d\n", i, int(sensor_voltage[i]*10000));
-        if (sensor_voltage[i] > 0.2) is_lost_track = false;
+        if (sensor_voltage[i] > 0.15) is_lost_track = false;
         if(sensor_voltage[i] > highest_voltage){
             second_highest_voltage = highest_voltage;
             second_highest_position = highest_position;

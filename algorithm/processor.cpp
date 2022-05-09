@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.09
+#define SPEED_LIMIT 0.07
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -16,6 +16,7 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->derivative_error = 0;
     this->integral_error = 0;
     this->buggy_state = FORWARD;
+    this->turning_count = 0;
 
     this->period_count = 0;
 
@@ -47,7 +48,7 @@ void Processor::trace_line() {
         // this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
         // this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
 
-        if((drive_board->get_left_motor_power() > 0.96 && drive_board->get_right_motor_power() > 0.96) || (error < -0.5 && error > 0.5)) {
+        if((drive_board->get_left_motor_power() > 0.9 && drive_board->get_right_motor_power() > 0.9) || (error < -0.5 && error > 0.5)) {
             this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
             this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
         } else {
@@ -65,10 +66,17 @@ void Processor::trace_line() {
         drive_board->set_left_motor_power(this->recommend_left_motor_power);
         drive_board->set_right_motor_power(this->recommend_right_motor_power);
 
+        if (this->perivious_error < 0.6 && this->perivious_error > -0.6) {
+            this->turning_count++;
+        } else {
+            this->turning_count = 0;
+        }
+
     } else {
         period_count += 1;
-        if(period_count > 160 || (this->perivious_error < 0.45 && this->perivious_error > -0.45)) {
-            if (this->period_count > 5){
+        if(period_count > 300 || turning_count > 5) {
+        // if(period_count > 50) {
+            if (this->period_count > 4){
                 this->buggy_state = STOP;
                 this->period_count = 0;
                 drive_board->set_left_motor_power(0.5);
@@ -122,7 +130,7 @@ void Processor::soft_reset() {
 }
 
 void Processor::start_tracing() {
-    my_ticker.attach(callback(this, &Processor::trace_line), 5ms);
+    my_ticker.attach(callback(this, &Processor::trace_line), 2ms);
 }
 
 void Processor::stop_tracing() {

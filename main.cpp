@@ -14,7 +14,7 @@ SensorBoard my_sensor_board(PA_0, PA_1,PA_4, PB_0, PC_1, PC_0, PA_8, PB_10, PB_4
 
 void state_machine() {
   Processor my_processor(&my_drive_board, &my_sensor_board);
-   my_processor.set_gain(0.0056, 1.1, 0.000 , 0.08);
+   my_processor.set_gain(0.0056, 1.27, 0.000 , 0.1);
   while (true)
   {
     if (hm10.get_command() == start) {
@@ -34,9 +34,9 @@ void state_machine() {
        my_processor.stop_tracing();
        my_drive_board.set_left_motor_power(0.5);
        my_drive_board.set_right_motor_power(0.5);
-       ThisThread::sleep_for(400ms);
-       my_drive_board.set_left_motor_power(0.2);
-       my_drive_board.set_right_motor_power(0.75);
+       ThisThread::sleep_for(200ms);
+       my_drive_board.set_left_motor_power(0.13);
+       my_drive_board.set_right_motor_power(0.8);
        ThisThread::sleep_for(500ms);
        my_sensor_board.get_sensor_status();
        while (line_position(my_sensor_board.get_all_sensor_value()) > 6000) { my_sensor_board.get_sensor_status(); }

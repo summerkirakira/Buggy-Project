@@ -17,6 +17,7 @@ class Processor {
         float derivative_gain;
         float integral_gain;
         float speed_gain;
+        int turning_count;
 
         int period_count;
 
