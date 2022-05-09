@@ -4,7 +4,7 @@
 #include <./algorithm/processor.h>
 #include <./algorithm/algorithm.h>
 
-#define SPEED_LIMIT 0.082
+#define SPEED_LIMIT 0.079
 
 Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
     this->drive_board = drive_board;
@@ -48,7 +48,7 @@ void Processor::trace_line() {
         // this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
         // this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
 
-        if((drive_board->get_left_motor_power() > 0.9 && drive_board->get_right_motor_power() > 0.9) || (error < -0.5 && error > 0.5)) {
+        if((drive_board->get_left_motor_power() > 0.9 && drive_board->get_right_motor_power() > 0.9) || (error < -0.7 && error > 0.7)) {
             this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
             this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
         } else {
