@@ -22,7 +22,6 @@ Processor::Processor(DriveBoard * drive_board, SensorBoard * sensor_board) {
 
     this->set_gain(0.01, 0, 0, 0);
 
-    start_tracing();
 }
 
 void Processor::trace_line() {
@@ -45,16 +44,23 @@ void Processor::trace_line() {
         float current_left_motor_power = drive_board->get_left_motor_power();
         float current_right_motor_power = drive_board->get_right_motor_power();
         // float speed_difference = SPEED_LIMIT - drive_board->get_current_speed() * this->speed_gain;
-        // this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 - speed_power;
-        // this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 - speed_power;
-
-        if((drive_board->get_left_motor_power() > 0.9 && drive_board->get_right_motor_power() > 0.9) || (error < -0.7 && error > 0.7)) {
+        if(drive_board->get_left_motor_power() > 1 || drive_board->get_right_motor_power() > 1 || (error < -0.5 && error > 0.5)) {
             this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
             this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
         } else {
             this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
             this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
         }
+        
+
+        if(drive_board->get_left_motor_power() > 1 || drive_board->get_right_motor_power() > 1 || (error < -0.5 && error > 0.5)) {
+            this->recommend_left_motor_power = current_left_motor_power + turning_power / 2;
+            this->recommend_right_motor_power = current_right_motor_power - turning_power / 2;
+        } else {
+            this->recommend_left_motor_power = current_left_motor_power + turning_power / 2 + speed_power;
+            this->recommend_right_motor_power = current_right_motor_power - turning_power / 2 + speed_power;
+        }
+
 
         // if(this->recommend_left_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
         //     this->recommend_left_motor_power = 0.5;
@@ -63,8 +69,8 @@ void Processor::trace_line() {
         // if(this->recommend_right_motor_power < 0.5 && drive_board->get_current_speed() < 0.04) {
         //     this->recommend_right_motor_power = 0.5;
         // }
-        drive_board->set_left_motor_power(this->recommend_left_motor_power);
-        drive_board->set_right_motor_power(this->recommend_right_motor_power);
+        drive_board->soft_set_left_motor_power(this->recommend_left_motor_power);
+        drive_board->soft_set_left_motor_power(this->recommend_right_motor_power);
 
         if (this->perivious_error < 0.6 && this->perivious_error > -0.6) {
             this->turning_count++;
@@ -74,9 +80,8 @@ void Processor::trace_line() {
 
     } else {
         period_count += 1;
-        if(period_count > 300 || turning_count > 5) {
-        // if(period_count > 50) {
-            if (this->period_count > 4){
+        if(period_count > 140 || (this->perivious_error < 0.45 && this->perivious_error > -0.45)) {
+            if (this->period_count > 10){
                 this->buggy_state = STOP;
                 this->period_count = 0;
                 drive_board->set_left_motor_power(0.5);

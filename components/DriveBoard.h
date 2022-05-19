@@ -7,6 +7,7 @@ class DriveBoard {
         Motor left_motor;
         Motor right_motor;
         DigitalOut enable;
+        bool is_auto_mode;
         int status; // 0 for normal, 1 for turning left, 2 for turning right
         float left_motor_flag_distance;
         float right_motor_flag_distance;
@@ -43,4 +44,6 @@ class DriveBoard {
         float get_current_speed();
         void set_check_point();
         int get_right_bipolar();
+        void soft_set_left_motor_power(float power);
+        void soft_set_right_motor_power(float power);
 };
